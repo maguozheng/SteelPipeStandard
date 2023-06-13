@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Steel Pipe Standard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      overflow: hidden;
+    }
+    
+    .container {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+    }
+    
+    .button {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100px;
+      height: 100px;
+      background-color: #3498db; /* 蓝色背景 */
+      color: #fff;
+      font-size: 16px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+      transition: background-color 0.3s ease;
+    }
+    
+    .button:hover {
+      background-color: #fcd462; /* 明显的黄色背景 */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 自动生成按钮 -->
+    <script>
+      var buttonContainer = document.querySelector('.container');
+      var pdfFiles = [
+        { name: 'API-5L.pdf' },
+        { name: 'ASTM-A335.pdf' },
+        { name: 'ASTM-A530.pdf' },
+        { name: 'ASTM-A671.pdf' },
+        { name: 'ASTM-A358.pdf' },
+        { name: 'ASTM-A480.pdf' },
+        { name: 'ASTM-A519.pdf' },
+        { name: 'ASTM-A269.pdf' },
+
+      ]; // 您的PDF文件列表
+      
+      // 检查按钮位置是否与已有按钮重叠
+      function checkOverlap(button, buttons) {
+        var rect1 = button.getBoundingClientRect();
+        
+        for (var i = 0; i < buttons.length; i++) {
+          var rect2 = buttons[i].getBoundingClientRect();
+          
+          if (
+            rect1.left < rect2.right &&
+            rect1.right > rect2.left &&
+            rect1.top < rect2.bottom &&
+            rect1.bottom > rect2.top
+          ) {
+            return true;
+          }
+        }
+        
+        return false;
+      }
+      
+      // 生成随机位置的按钮
+      function generateRandomButtons() {
+        buttonContainer.innerHTML = '';
+        var buttons = [];
+        
+        pdfFiles.forEach(function(file) {
+          var button = document.createElement('button');
+          button.className = 'button';
+          button.innerText = file.name;
+          button.addEventListener('click', function() {
+            openPDF(file.name);
+          });
+          
+          var containerWidth = buttonContainer.clientWidth;
+          var containerHeight = buttonContainer.clientHeight;
+          var buttonWidth = button.offsetWidth;
+          var buttonHeight = button.offsetHeight;
+          var maxPosX = containerWidth - buttonWidth;
+          var maxPosY = containerHeight - buttonHeight;
+          var randomX, randomY;
+          var overlapping;
+          
+          do {
+            randomX = Math.floor(Math.random() * (maxPosX + 1));
+            randomY = Math.floor(Math.random() * (maxPosY + 1));
+            button.style.left = randomX + 'px';
+            button.style.top = randomY + 'px';
+            
+            overlapping = checkOverlap(button, buttons);
+          } while (overlapping);
+          
+          buttons.push(button);
+          buttonContainer.appendChild(button);
+        });
+      }
+      
+      // 打开PDF文件
+      function openPDF(pdfName) {
+        var pdfPath = './' + pdfName; // 使用相对路径引用PDF文件
+        window.open(pdfPath, '_blank');
+      }
+      
+      // 初始化生成按钮
+      generateRandomButtons();
+    </script>
+  </div>
+</body>
+</html>
